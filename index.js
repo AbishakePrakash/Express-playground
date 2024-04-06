@@ -20,32 +20,16 @@ io.on("connection", (socket) => {
 
   // Handle messages from clients
   socket.on("send_message", (message) => {
-    try {
-      console.log(`Got a from client ${JSON.stringify(message)}`);
-      socket.broadcast.emit("received_message", message, socket.id);
-      console.log(`Sent back the messsage to all clients ${message}`);
-      // io.emit("received_message", message);
-    } catch (error) {
-      console.log("Error on : ", error);
-    }
+    console.log(`Got a msg from client ${JSON.stringify(message)}`);
+    io.emit("received_message", message, socket.id);
+    console.log(
+      `Sent back the messsage to all clients ${JSON.stringify(message)}`
+    );
   });
-
-  // socket.on("disconnect", () => {
-  //   console.log(`A client disconnected ${socket.id}`);
-  // });
-
-  // // Send a welcome message to the client
-  // socket.emit("message", "Hola, Socket.IO amigo!");
 });
 
 app.get("/", (req, res) => {
-  const result = {
-    success: "",
-    data: "",
-  };
-
-  res.status(200).send({ ...result, success: "Okay", data: "Hola Amigos" });
-  // res.status(503).send({ ...result, success: "Failed", data: "Adios Amigos" });
+  res.status(200).send({ success: "Okay", data: "Hola Amigos" });
 });
 
 const PORT = process.env.PORT || 3001;
