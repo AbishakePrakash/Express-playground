@@ -1,38 +1,73 @@
-import express, { json } from "express";
-import { createServer } from "http";
-import { Server } from "socket.io";
-import cors from "cors";
+const express = require("express");
+const bodyParser = require("body-parser");
+// const { default: makeTransaction } = require("./record");
 
 const app = express();
-app.use(cors());
-app.use(json());
+const port = 8000;
 
-const server = createServer(app);
-const io = new Server(server, {
-  cors: {
-    origin: "http://localhost:3000",
-    methods: ["GET", "POST"],
-  },
-});
-
-io.on("connection", (socket) => {
-  console.log(`A client connected ${socket.id}`);
-
-  // Handle messages from clients
-  socket.on("send_message", (message) => {
-    console.log(`Got a msg from client ${JSON.stringify(message)}`);
-    io.emit("received_message", message, socket.id);
-    console.log(
-      `Sent back the messsage to all clients ${JSON.stringify(message)}`
-    );
-  });
-});
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 app.get("/", (req, res) => {
-  res.status(200).send({ success: "Okay", data: "Hola Amigos" });
+  res.json({ message: "Hola Amigos!!!" });
 });
 
-const PORT = process.env.PORT || 3001;
-server.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+function makeTransaction(loanAmount, pendingAmount, dueAmount, collection) {
+  if (collection > dueAmount) {
+  } else {
+  }
+  console.log("Transaction Successfull");
+}
+
+// // POST endpoint
+// app.post("/post", (req, res) => {
+//   const { body } = req;
+//   console.log("Received POST request with data:", body);
+//   res.json(body);
+// });
+
+// // POST endpoint for FormData
+// app.post("/postFormData", (req, res) => {
+//   const formData = req.body;
+//   console.log("Received FormData:", formData);
+//   res.json(formData);
+// });
+
+app.post("/collection", (req, res) => {
+  var result = {
+    error: "None",
+    preTransc: {},
+    postTransc: {},
+  };
+  const { userId, loanAmount, pendingAmount, tenure, collection } = req.body;
+  console.log(loanAmount);
+
+  const dueAmount = loanAmount / tenure;
+  const paidAmount = loanAmount - pendingAmount;
+  const paidDues = (loanAmount - pendingAmount) / dueAmount;
+  const remainingDues = tenure - paidDues;
+  const revisedPendingAmount =
+    pendingAmount + (dueAmount - collection) - dueAmount;
+
+  // const dueAmountbyBal = pendingAmount / (tenure - dueId + 1);
+  result.preTransc.loanAmount = loanAmount;
+  result.preTransc.pendingAmount = pendingAmount;
+  result.preTransc.collection = collection;
+  result.preTransc.paidAmount = paidAmount;
+  result.preTransc.dueAmount = dueAmount;
+  result.preTransc.paidDues = paidDues;
+  result.preTransc.remainingDues = remainingDues;
+  result.postTransc.pendingAmount = revisedPendingAmount;
+  result.postTransc.paidDues = paidDues++;
+  result.postTransc.remainingDues = remainingDues--;
+  result.postTransc.dueAmount = revisedPendingAmount / (remainingDues - 1);
+
+  // makeTransaction(loanAmount, pendingAmount, dueAmount, collection);
+
+  console.log(result);
+  res.status(200).send(result);
+});
+
+app.listen(port, () => {
+  console.log(`Server is listening on port ${port}`);
 });
