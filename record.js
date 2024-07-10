@@ -4,5 +4,5 @@ export default function makeTransaction(
   dueAmount,
   collection
 ) {
-  console.log("Transaction Successfull");
+  Logger("Transaction Successfull");
 }

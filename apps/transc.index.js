@@ -27,7 +27,7 @@ app.post("/transaction", (req, res) => {
 
   if (transactionSuccessful) {
     walletBalances[recipient_address] -= deposit_amount + transaction_charges;
-    console.log(
+    Logger(
       `Recipient's wallet balance after transaction: ${walletBalances[recipient_address]}`
     );
 
@@ -46,5 +46,5 @@ app.get("/", (req, res) => {
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  Logger(`Server is running on port ${PORT}`);
 });

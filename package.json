@@ -7,15 +7,23 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js",
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "spot": "nodemon ome_algo_SPOT.js",
+    "algo": "nodemon fibonacci.js",
+    "play": "nodemon playground.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@tyriar/fibonacci-heap": "^2.0.9",
     "autocannon": "^7.15.0",
+    "bcrypt": "^5.1.1",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
+    "import": "^0.0.6",
+    "moment": "^2.30.1",
+    "mongoose": "^8.4.4",
     "nodemon": "^3.1.0",
     "socket.io": "^4.7.5"
   }

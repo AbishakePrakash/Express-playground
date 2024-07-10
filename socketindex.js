@@ -16,15 +16,13 @@ const io = new Server(server, {
 });
 
 io.on("connection", (socket) => {
-  console.log(`A client connected ${socket.id}`);
+  Logger(`A client connected ${socket.id}`);
 
   // Handle messages from clients
   socket.on("send_message", (message) => {
-    console.log(`Got a msg from client ${JSON.stringify(message)}`);
+    Logger(`Got a msg from client ${JSON.stringify(message)}`);
     io.emit("received_message", message, socket.id);
-    console.log(
-      `Sent back the messsage to all clients ${JSON.stringify(message)}`
-    );
+    Logger(`Sent back the messsage to all clients ${JSON.stringify(message)}`);
   });
 });
 
@@ -34,5 +32,5 @@ app.get("/", (req, res) => {
 
 const PORT = process.env.PORT || 3001;
 server.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  Logger(`Server is running on port ${PORT}`);
 });
